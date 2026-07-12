@@ -12,7 +12,7 @@ Proyecto académico desarrollado para la **Universidad Abierta Interamericana (U
 ## 🌐 Acceso a la Aplicación (Desplegada)
 ¡No es necesario instalar nada para probar el sistema! La aplicación se encuentra desplegada en la nube y está lista para su uso inmediato.
 
-👉 **[Haz clic aquí para ir a la aplicación interactiva](REEMPLAZAR_POR_TU_LINK_DE_STREAMLIT_CLOUD)**
+👉 **[https://tpuaipython2026.streamlit.app]**
 
 *(Nota: En la plataforma online puedes usar directamente el "Modo Prueba" ya que el modelo se encuentra pre-entrenado y cargado en memoria).*
 
