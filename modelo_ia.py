@@ -10,7 +10,7 @@ class ValidadorGastoVeterinario:
 
     def __init__(self, ruta_archivo_csv = None):
         self.ruta_archivo_csv = ruta_archivo_csv
-        self._modelo = None
+        self.datos_grafico_split = None
         self.precision_modelo = 0.0
         self.error_promedio = 0.0
 
@@ -63,7 +63,10 @@ class ValidadorGastoVeterinario:
         modelo.fit(X_train, y_train)
 
         self.precision_modelo = modelo.score(X_test, y_test)
-        self._modelo = modelo
+        
+        predicciones_test = modelo.predict(X_test)
+        self.error_promedio = mean_absolute_error(y_test, predicciones_test)
+        
         
         df_train = X_train.copy()
         df_train["costo_total"] = y_train
@@ -75,9 +78,8 @@ class ValidadorGastoVeterinario:
         df_test["Conjunto"] = "Prueba"
 
         self.datos_grafico_split = pd.concat([df_train, df_test])
+
         ruta_modelo = "modelo_costos.pkl"
-        predicciones_test = modelo.predict(X_test)
-        self.error_promedio = mean_absolute_error(y_test, predicciones_test)
         try:
             joblib.dump(modelo, ruta_modelo)
         except Exception as error:
@@ -96,8 +98,6 @@ class ValidadorGastoVeterinario:
         except Exception as error:
             raise RuntimeError("No se pudo cargar el modelo.") from error
 
-        self._modelo = modelo_cargado
-
         datos = pd.DataFrame([datos_paciente])
         datos = datos[[
             "peso_kg",
@@ -111,5 +111,5 @@ class ValidadorGastoVeterinario:
         datos["dias_internacion"] = datos["dias_internacion"].apply(lambda valor: int(valor))
         datos["es_raza_peligrosa"] = datos["es_raza_peligrosa"].apply(lambda valor: int(valor))
 
-        prediccion = self._modelo.predict(datos)
+        prediccion = modelo_cargado.predict(datos)
         return float(prediccion[0])
